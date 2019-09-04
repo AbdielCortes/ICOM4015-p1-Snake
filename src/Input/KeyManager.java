@@ -11,6 +11,7 @@ import java.awt.event.KeyListener;
 public class KeyManager implements KeyListener {
 
 	private boolean[] keys,justPressed,cantPress;
+	//add key variables
 	public boolean up=false, down=false, left=false, right=false;
 	public boolean pbutt=false;
 
@@ -36,7 +37,8 @@ public class KeyManager implements KeyListener {
 				justPressed[i]=true;
 			}
 		}
-
+		
+		//assigns key variables to keyboard keys
 		up = keys[KeyEvent.VK_W];
 		down = keys[KeyEvent.VK_S];
 		left = keys[KeyEvent.VK_A];
