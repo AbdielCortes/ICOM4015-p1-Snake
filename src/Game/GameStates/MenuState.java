@@ -26,7 +26,7 @@ public class MenuState extends State {
             @Override
             public void onClick() {
                 handler.getMouseManager().setUimanager(null);
-                handler.getGame().reStart();
+                handler.getGame().reStart(); //restarts game
                 State.setState(handler.getGame().gameState);
             }
         }));
