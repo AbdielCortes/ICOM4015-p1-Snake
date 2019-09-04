@@ -73,7 +73,7 @@ public class GameSetUp implements Runnable {
         display.getCanvas().addMouseListener(mouseManager);
         display.getCanvas().addMouseMotionListener(mouseManager);
 
-        Images img = new Images();
+        Images img = new Images(); //loads all images
 
 
         handler = new Handler(this);
@@ -118,7 +118,7 @@ public class GameSetUp implements Runnable {
 
     public void run(){
 
-        //initiallizes everything in order to run without breaking
+        //initializes everything in order to run without breaking
         init();
 
         int fps = 60;
@@ -169,7 +169,7 @@ public class GameSetUp implements Runnable {
             display.getCanvas().createBufferStrategy(3);
             return;
         }
-        g = bs.getDrawGraphics();
+        g = bs.getDrawGraphics(); //add images
         //Clear Screen
         g.clearRect(0, 0, width, height);
 
