@@ -19,7 +19,7 @@ public class GameState extends State {
         super(handler);
         world = new WorldOne(handler);
         handler.setWorld(world);
-        handler.getWorld().player= new Player(handler);
+        handler.getWorld().player= new Player(handler); //creates player in world
         for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
             for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
 
@@ -28,6 +28,7 @@ public class GameState extends State {
 
             }
         }
+        //sets player location
         handler.getWorld().playerLocation[handler.getWorld().player.xCoord][handler.getWorld().player.yCoord] =true;
 
 
