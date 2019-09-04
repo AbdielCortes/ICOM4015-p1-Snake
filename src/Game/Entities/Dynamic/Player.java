@@ -35,7 +35,7 @@ public class Player {
 
     public void tick(){
         moveCounter++; 
-        if(moveCounter>=5) { //every five frames the snake moves , changes snake speed
+        if(moveCounter>=5) { //every five frames the snake moves, changes snake speed
             checkCollisionAndMove();
             moveCounter=0; 
         }

@@ -1,5 +1,6 @@
 package Main;
 
+import Worlds.WorldOne;
 
 /**
  * Created by AlexVR on 7/1/2018.
@@ -8,7 +9,7 @@ package Main;
 public class Launch {
 
     public static void main(String[] args) {
-        GameSetUp game = new GameSetUp("Snake", 900, 900);
+        GameSetUp game = new GameSetUp("Snake", WorldOne.windowPixelSize, WorldOne.windowPixelSize);
         game.start();
     }
 }

@@ -22,7 +22,9 @@ public abstract class WorldBase {
     //automatically calculated, depends on previous input.
     //The size of each box, the size of each box will be GridPixelsize x GridPixelsize.
     public int GridPixelsize;
-
+    
+    public static int windowPixelSize = 800; //sets window pixel dimensions
+    
     public Player player;
 
     protected Handler handler;
@@ -53,7 +55,7 @@ public abstract class WorldBase {
 
     public void render(Graphics g){
 
-        for (int i = 0; i <= 900; i = i + GridPixelsize) { //draws grid lines
+        for (int i = 0; i <= windowPixelSize; i = i + GridPixelsize) { //draws grid lines
         	
         	//---------------------------grid color------------------------------------------------
         	//Color purp = new Color(243, 182, 252);
