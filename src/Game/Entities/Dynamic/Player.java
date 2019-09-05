@@ -49,7 +49,8 @@ public class Player {
         }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_RIGHT) && direction != "Left"){
             direction="Right";
         }
-
+        
+        addTail();
     }
 
     public void checkCollisionAndMove(){
@@ -269,5 +270,13 @@ public class Player {
 
     public void setJustAte(boolean justAte) {
         this.justAte = justAte;
+    }
+    
+    //Method to add tail using "N" key
+    public void addTail() {
+    	if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_N)) {
+    		Eat();
+    		handler.getWorld().appleOnBoard=true;
+    	}
     }
 }

@@ -58,8 +58,8 @@ public abstract class WorldBase {
         for (int i = 0; i <= windowPixelSize; i = i + GridPixelsize) { //draws grid lines
         	
         	//---------------------------grid color------------------------------------------------
-        	//Color purp = new Color(243, 182, 252);
-            g.setColor(Color.black);
+        	Color purp = new Color(243, 182, 252);
+            g.setColor(purp);
             g.drawLine(0, i, handler.getWidth() , i);
             g.drawLine(i,0,i,handler.getHeight());
 
