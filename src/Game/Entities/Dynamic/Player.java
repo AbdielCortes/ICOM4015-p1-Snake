@@ -13,13 +13,14 @@ public class Player {
 
     public int lenght; //how many pieces of tail
     public boolean justAte; //true when player eats apple
-    private Handler handler; //xy coordinates of the head
+    private Handler handler; //x y coordinates of the head
 
     public int xCoord;
     public int yCoord;
 
     public int moveCounter; //how many times the player moved
 
+    //Stores current direction
     public String direction;//is your first name one?
 
     public Player(Handler handler){
@@ -39,14 +40,13 @@ public class Player {
             checkCollisionAndMove();
             moveCounter=0; 
         }
-        //HINT: check if its going in the opposite direction before changing direction
-        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_UP)){ //&& direction != down
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_UP) && direction != "Down"){ 
             direction="Up";
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_DOWN)){
+        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_DOWN) && direction != "Up"){
             direction="Down";
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_LEFT)){
+        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_LEFT) && direction != "Right"){
             direction="Left";
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_RIGHT)){
+        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_RIGHT) && direction != "Left"){
             direction="Right";
         }
 
