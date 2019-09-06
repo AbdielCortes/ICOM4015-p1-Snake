@@ -31,6 +31,7 @@ public abstract class WorldBase {
 
 
     public Boolean appleOnBoard;
+    public Boolean appleTwoOnBoard; //boolean variable to spawn second apple
     protected Apple apple;
     public Boolean[][] appleLocation;
 
@@ -44,6 +45,7 @@ public abstract class WorldBase {
         this.handler = handler;
 
         appleOnBoard = false;
+        appleTwoOnBoard = false; //sets second apple to false so that it spawns one at start
 
 
     }

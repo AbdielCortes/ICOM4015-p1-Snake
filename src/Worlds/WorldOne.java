@@ -26,23 +26,37 @@ public class WorldOne extends WorldBase{
     public void tick() {
         super.tick();
         player.tick();
+        
+        //spawns first apple if its been eaten
         if(!appleOnBoard){
-            appleOnBoard=true;
-            int appleX = new Random().nextInt(handler.getWorld().GridWidthHeightPixelCount-1); //generates random x coordinates
-            int appleY = new Random().nextInt(handler.getWorld().GridWidthHeightPixelCount-1); //generates random y coordinates
-
-            //change coordinates till one is selected in which the player isn't standing
-            boolean goodCoordinates=false;
-            do{
-                if(!handler.getWorld().playerLocation[appleX][appleY]){ //checks if player is not in the position of the player
-                    goodCoordinates=true;
-                }
-            }while(!goodCoordinates);
-
-            apple = new Apple(handler,appleX,appleY); 
-            appleLocation[appleX][appleY]=true; //sets apple location to random x and random y
-
+            appleOnBoard = true; //sets state of the apple as present
+            spawnApple(); //spawns apple in a random x and y
         }
+        
+        //spawns second apple if it was eaten
+        if(!appleTwoOnBoard) {
+        	appleTwoOnBoard = true; //sets state of the apple as present
+        	spawnApple(); //spawns apple in a random x and y
+        }
+        
+    }
+    
+    //method that spawns a new apple
+    //code was originally inside WorldOne->tick
+    public void spawnApple() {
+    	int appleX = new Random().nextInt(handler.getWorld().GridWidthHeightPixelCount-1); //generates random x coordinates
+    	int appleY = new Random().nextInt(handler.getWorld().GridWidthHeightPixelCount-1); //generates random y coordinates
+
+    	//change coordinates till one is selected in which the player isn't standing
+    	boolean goodCoordinates=false;
+    	do{
+    		if(!handler.getWorld().playerLocation[appleX][appleY]){ //checks if player is not in the position of the player
+    			goodCoordinates=true;
+    		}
+    	}while(!goodCoordinates);
+
+    	apple = new Apple(handler,appleX,appleY); 
+    	appleLocation[appleX][appleY]=true; //sets apple location to random x and random y
     }
 
     @Override

@@ -107,12 +107,20 @@ public class Player {
         Random r = new Random();
         for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
             for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
-            	//-------------------snake color----------------------------------------------------------
-            	Color grn = new Color(24, 125, 29);
-                g.setColor(grn);
-
-                //split in order to implement different colored snake and apple
-                if(playeLocation[i][j]||handler.getWorld().appleLocation[i][j]){
+                
+            	//snake color
+                if(playeLocation[i][j]){
+                	Color grn = new Color(24, 125, 29);
+                    g.setColor(grn);
+                    g.fillRect((i*handler.getWorld().GridPixelsize),
+                            (j*handler.getWorld().GridPixelsize),
+                            handler.getWorld().GridPixelsize,
+                            handler.getWorld().GridPixelsize);
+                }
+            	//apple color
+                if(handler.getWorld().appleLocation[i][j]){
+                	Color rd = new Color(179, 18, 18);
+                    g.setColor(rd);
                     g.fillRect((i*handler.getWorld().GridPixelsize),
                             (j*handler.getWorld().GridPixelsize),
                             handler.getWorld().GridPixelsize,
@@ -128,7 +136,7 @@ public class Player {
     public void Eat(){ //used to add tail piece
         lenght++; //increases tail length
         Tail tail= null;
-        handler.getWorld().appleLocation[xCoord][yCoord]=false; //deletes eaten apple
+        handler.getWorld().appleLocation[xCoord][yCoord]=false; //deletes eaten apple, if true spawns new apple
         handler.getWorld().appleOnBoard=false; //tells that a new apple needs to be generated
         switch (direction){
             case "Left":
