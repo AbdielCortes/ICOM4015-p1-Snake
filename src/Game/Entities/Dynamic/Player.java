@@ -60,30 +60,32 @@ public class Player {
         switch (direction){
             case "Left":
                 if(xCoord==0){ //checks if it not hitting left wall
-                    kill();
+                	//if snake at left wall, teleport to right wall
+                	xCoord = handler.getWorld().GridWidthHeightPixelCount-1;
                 }else{
                     xCoord--;
                 }
                 break;
             case "Right":
                 if(xCoord==handler.getWorld().GridWidthHeightPixelCount-1){ //checks if it not hitting right wall
-                    kill();
+                    xCoord = 0; //if snake at right wall, teleport to left
                 }else{
                     xCoord++;
                 }
                 break;
             case "Up":
                 if(yCoord==0){ //checks if it not hitting top wall
-                    kill();
+                	//if snake at top wall, teleport to bottom
+                	yCoord = handler.getWorld().GridWidthHeightPixelCount-1;
                 }else{
                     yCoord--;
                 }
                 break;
             case "Down":
                 if(yCoord==handler.getWorld().GridWidthHeightPixelCount-1){ //checks if it not hitting bottom wall
-                    kill();
+                    yCoord = 0; //if snake at bottom wall, teleport to top
                 }else{
-                    yCoord++;
+                    yCoord++; 
                 }
                 break;
         }
