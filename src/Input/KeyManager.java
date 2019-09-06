@@ -14,7 +14,7 @@ public class KeyManager implements KeyListener {
 	//add key variables
 	public boolean up=false, down=false, left=false, right=false;
 	public boolean pbutt=false;
-	public boolean addTail=false; //Key to add piece of tail
+	public boolean tail=false; //Key to add piece of tail
 
 
 	public KeyManager(){
@@ -47,7 +47,7 @@ public class KeyManager implements KeyListener {
 
 		pbutt = keys[KeyEvent.VK_ESCAPE];
 
-		addTail = keys[KeyEvent.VK_N]; //key to add tail
+		tail = keys[KeyEvent.VK_N]; //key to add tail
 	}
 
 	@Override
