@@ -284,7 +284,7 @@ public class Player {
     
     //Method to add tail using "N" key
     public void addTail() {
-    	if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_N)) {
+    	if(handler.getKeyManager().tail) {
     		Eat();
     		handler.getWorld().appleOnBoard=true;
     	}
