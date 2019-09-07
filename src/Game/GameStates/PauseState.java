@@ -6,6 +6,7 @@ import UI.UIImageButton;
 import UI.UIManager;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 
 /**
  * Created by AlexVR on 7/1/2018.
@@ -46,7 +47,7 @@ public class PauseState extends State {
         handler.getMouseManager().setUimanager(uiManager);
         uiManager.tick();
         count++;
-        if( count>=30){
+        if(count>=30){
             count=30;
         }
         if(handler.getKeyManager().pbutt && count>=30){
@@ -54,8 +55,7 @@ public class PauseState extends State {
 
             State.setState(handler.getGame().gameState);
         }
-
-
+       
     }
 
     @Override

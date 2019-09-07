@@ -6,6 +6,8 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.Random;
 
+import Game.GameStates.State;
+
 /**
  * Created by AlexVR on 7/2/2018.
  */
@@ -50,7 +52,12 @@ public class Player {
             direction="Right";
         }
         
-        addTail();
+        addTail(); //adds tail piece when n key is pressed
+        
+        //pauses game when 'esc' is pressed
+        if(handler.getKeyManager().pbutt) {
+        	State.setState(handler.getGame().pauseState);
+        }
     }
 
     public void checkCollisionAndMove(){
