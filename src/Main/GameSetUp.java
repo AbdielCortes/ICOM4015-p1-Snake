@@ -85,8 +85,7 @@ public class GameSetUp implements Runnable {
         State.setState(menuState);
 
         try {
-
-            audioFile = getClass().getResourceAsStream("/music/nature.wav"); //game music
+            audioFile = getClass().getResourceAsStream("/music/DioTheme.wav"); //game music
             audioStream = AudioSystem.getAudioInputStream(audioFile);
             format = audioStream.getFormat();
             info = new DataLine.Info(Clip.class, format);
