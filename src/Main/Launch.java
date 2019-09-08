@@ -9,7 +9,7 @@ import Worlds.WorldOne;
 public class Launch {
 
     public static void main(String[] args) {
-        GameSetUp game = new GameSetUp("Snake", WorldOne.windowPixelSize, WorldOne.windowPixelSize);
+        GameSetUp game = new GameSetUp("The World Snake", WorldOne.windowPixelSize, WorldOne.windowPixelSize);
         game.start();
     }
 }
