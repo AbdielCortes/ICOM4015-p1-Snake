@@ -42,13 +42,13 @@ public class Player {
             checkCollisionAndMove();
             moveCounter=0; 
         }
-        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_UP) && direction != "Down"){ 
+        if(handler.getKeyManager().up && direction != "Down"){ 
             direction="Up";
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_DOWN) && direction != "Up"){
+        }if(handler.getKeyManager().down && direction != "Up"){
             direction="Down";
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_LEFT) && direction != "Right"){
+        }if(handler.getKeyManager().left && direction != "Right"){
             direction="Left";
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_RIGHT) && direction != "Left"){
+        }if(handler.getKeyManager().right && direction != "Left"){
             direction="Right";
         }
         
@@ -58,6 +58,7 @@ public class Player {
         if(handler.getKeyManager().pbutt) {
         	State.setState(handler.getGame().pauseState);
         }
+     
     }
 
     public void checkCollisionAndMove(){
@@ -102,6 +103,10 @@ public class Player {
         if(handler.getWorld().appleLocation[xCoord][yCoord]){ //eats apple
             Eat();
         }
+        
+//        if(handler.getWorld().slowTimeLocation[xCoord][yCoord]) {
+//        	//slow time and play za warudo sound
+//        }
 
         if(!handler.getWorld().body.isEmpty()) {
             handler.getWorld().playerLocation[handler.getWorld().body.getLast().x][handler.getWorld().body.getLast().y] = false;
@@ -126,10 +131,20 @@ public class Player {
                             handler.getWorld().GridPixelsize,
                             handler.getWorld().GridPixelsize);
                 }
+                
             	//apple color
                 if(handler.getWorld().appleLocation[i][j]){
                 	Color rd = new Color(179, 18, 18);
                     g.setColor(rd);
+                    g.fillRect((i*handler.getWorld().GridPixelsize),
+                            (j*handler.getWorld().GridPixelsize),
+                            handler.getWorld().GridPixelsize,
+                            handler.getWorld().GridPixelsize);
+                }
+                
+                //slow time color
+                if(handler.getWorld().slowTimeLocation[i][j]){
+                    g.setColor(Color.black);
                     g.fillRect((i*handler.getWorld().GridPixelsize),
                             (j*handler.getWorld().GridPixelsize),
                             handler.getWorld().GridPixelsize,
@@ -268,6 +283,16 @@ public class Player {
         }
         handler.getWorld().body.addLast(tail);
         handler.getWorld().playerLocation[tail.x][tail.y] = true;
+    }
+    
+    //method to slow snake speed when it eats power up
+    //place inside Player->checkColisionsAndMove
+    public void eatStopTime() {
+    	//play 'za warudo' sound
+    	//slow 'time'(speed)  
+    	//wait 9 seconds
+    	 handler.getWorld().slowTimeLocation[xCoord][yCoord]=false; //deletes eaten power up, if true spawns new power up
+         handler.getWorld().slowTimeOnBoard=false; //tells that a new power up needs to be generated
     }
 
     public void kill(){

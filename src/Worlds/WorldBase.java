@@ -3,6 +3,7 @@ package Worlds;
 import Game.Entities.Dynamic.Player;
 import Game.Entities.Dynamic.Tail;
 import Game.Entities.Static.Apple;
+import Game.Entities.Static.SlowTime;
 import Main.Handler;
 
 import java.awt.*;
@@ -31,9 +32,16 @@ public abstract class WorldBase {
 
 
     public Boolean appleOnBoard;
-    public Boolean appleTwoOnBoard; //boolean variable to spawn second apple
+    //public Boolean appleTwoOnBoard; //boolean variable to spawn second apple
     protected Apple apple;
     public Boolean[][] appleLocation;
+    
+    
+    //variables for slow time power up
+    public Boolean slowTimeOnBoard; //boolean to spawn slowTime
+    protected SlowTime slowTime; //creates instance of SlowTime
+    public Boolean[][] slowTimeLocation; //boolean array to generate location coordinates
+    
 
 
     public Boolean[][] playerLocation;
@@ -45,7 +53,8 @@ public abstract class WorldBase {
         this.handler = handler;
 
         appleOnBoard = false;
-        appleTwoOnBoard = false; //sets second apple to false so that it spawns one at start
+        //appleTwoOnBoard = false; //sets second apple to false so that it spawns one at start
+        slowTimeOnBoard = false; //spawns slow time at start
 
 
     }

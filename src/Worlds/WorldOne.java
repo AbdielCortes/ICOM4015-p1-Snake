@@ -1,6 +1,8 @@
 package Worlds;
 
 import Game.Entities.Static.Apple;
+import Game.Entities.Static.SlowTime;
+
 import Main.Handler;
 
 import java.awt.*;
@@ -19,6 +21,7 @@ public class WorldOne extends WorldBase{
         GridPixelsize = (windowPixelSize/GridWidthHeightPixelCount);
         playerLocation = new Boolean[GridWidthHeightPixelCount][GridWidthHeightPixelCount];
         appleLocation = new Boolean[GridWidthHeightPixelCount][GridWidthHeightPixelCount];
+        slowTimeLocation = new Boolean[GridWidthHeightPixelCount][GridWidthHeightPixelCount];
 
     }
 
@@ -34,9 +37,14 @@ public class WorldOne extends WorldBase{
         }
         
         //spawns second apple if it was eaten
-        if(!appleTwoOnBoard) {
-        	appleTwoOnBoard = true; //sets state of the apple as present
-        	spawnApple(); //spawns apple in a random x and y
+//        if(!appleTwoOnBoard) {
+//        	appleTwoOnBoard = true; //sets state of the apple as present
+//        	spawnApple(); //spawns apple in a random x and y
+//        }
+        
+        if(!slowTimeOnBoard) {
+        	slowTimeOnBoard = true; //sets state of power up as present
+        	spawnSlowTime(); //spawns power up in a random x and y
         }
         
     }
@@ -50,13 +58,30 @@ public class WorldOne extends WorldBase{
     	//change coordinates till one is selected in which the player isn't standing
     	boolean goodCoordinates=false;
     	do{
-    		if(!handler.getWorld().playerLocation[appleX][appleY]){ //checks if player is not in the position of the player
+    		if(!handler.getWorld().playerLocation[appleX][appleY]){ //checks if apple is not in the position of the player
     			goodCoordinates=true;
     		}
     	}while(!goodCoordinates);
 
     	apple = new Apple(handler,appleX,appleY); 
     	appleLocation[appleX][appleY]=true; //sets apple location to random x and random y
+    }
+    
+    
+    public void spawnSlowTime() {
+    	int slowTimeX = new Random().nextInt(handler.getWorld().GridWidthHeightPixelCount-1); //generates random x coordinates
+    	int slowTimeY = new Random().nextInt(handler.getWorld().GridWidthHeightPixelCount-1); //generates random y coordinates
+
+    	//change coordinates till one is selected in which the player isn't standing
+    	boolean goodCoordinates=false;
+    	do{
+    		if(!handler.getWorld().playerLocation[slowTimeX][slowTimeY]){ //checks if power up is not in the position of the player
+    			goodCoordinates=true;
+    		}
+    	}while(!goodCoordinates);
+    	
+    	slowTime = new SlowTime(handler, slowTimeX, slowTimeY);
+    	slowTimeLocation[slowTimeX][slowTimeY] = true;
     }
 
     @Override
