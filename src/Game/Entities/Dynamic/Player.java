@@ -79,6 +79,8 @@ public class Player {
         //pauses game when 'esc' is pressed
         if(handler.getKeyManager().pbutt) {
         	State.setState(handler.getGame().pauseState);
+        	//abre game over
+        	//State.setState(handler.getGame().gameOverState);
         }
         
         frameCounter++; //counts how many frames have passed
@@ -138,7 +140,7 @@ public class Player {
         	eatSlowTime();
         }
 
-        if(!handler.getWorld().body.isEmpty()) {
+        if(!handler.getWorld().body.isEmpty()) { //chequear
             handler.getWorld().playerLocation[handler.getWorld().body.getLast().x][handler.getWorld().body.getLast().y] = false;
             handler.getWorld().body.removeLast(); //removes last piece of the tail from body
             handler.getWorld().body.addFirst(new Tail(x, y,handler)); //adds new tail at the front
@@ -358,13 +360,10 @@ public class Player {
             for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
 
                 handler.getWorld().playerLocation[i][j]=false;
+                State.setState(handler.getGame().gameOverState);
             }
         }
-        //import java.awt.Graphics2D;
 
-        //if(kill()){
-        	//g2.setColor(Color.BLACK);
-        	//g2.drawString("Game Over");
     }
 
     public boolean isJustAte() {
