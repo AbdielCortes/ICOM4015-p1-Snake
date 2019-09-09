@@ -16,7 +16,9 @@ public class KeyManager implements KeyListener {
 	public boolean pbutt=false;
 
 	public boolean tail=false; //Key to add piece of tail
-
+	
+	public boolean increase=false; //Key to increase velocity
+	public boolean decrease=false; // Key to decrease velocity
 
 	public KeyManager(){
 
@@ -49,6 +51,9 @@ public class KeyManager implements KeyListener {
 		pbutt = keys[KeyEvent.VK_ESCAPE];
 
  		tail = keys[KeyEvent.VK_N]; //key to add tail
+ 		
+		increase = keys[KeyEvent.VK_EQUALS]; //key to increase velocity
+		decrease = keys[KeyEvent.VK_MINUS]; //key to decrease velocity
 
 	}
 

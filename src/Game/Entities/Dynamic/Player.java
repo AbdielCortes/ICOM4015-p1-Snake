@@ -5,6 +5,7 @@ import Main.Handler;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.Random;
+import java.math.*;
 
 import Game.GameStates.State;
 
@@ -24,6 +25,7 @@ public class Player {
 
     //Stores current direction
     public String direction;//is your first name one?
+    public int velocity = 5;
 
     public Player(Handler handler){
         this.handler = handler;
@@ -38,7 +40,7 @@ public class Player {
 
     public void tick(){
         moveCounter++; 
-        if(moveCounter>=5) { //every five frames the snake moves, changes snake speed
+        if(moveCounter>=velocity) { //every five frames the snake moves, changes snake speed
             checkCollisionAndMove();
             moveCounter=0; 
         }
@@ -53,6 +55,9 @@ public class Player {
         }
         
         addTail(); //adds tail piece when n key is pressed
+        //Method to increase velocity
+        
+        velocity();
         
         //pauses game when 'esc' is pressed
         if(handler.getKeyManager().pbutt) {
@@ -268,6 +273,8 @@ public class Player {
         }
         handler.getWorld().body.addLast(tail);
         handler.getWorld().playerLocation[tail.x][tail.y] = true;
+        
+        
     }
 
     public void kill(){
@@ -276,9 +283,13 @@ public class Player {
             for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
 
                 handler.getWorld().playerLocation[i][j]=false;
-
             }
         }
+        //import java.awt.Graphics2D;
+
+        //if(kill()){
+        	//g2.setColor(Color.BLACK);
+        	//g2.drawString("Game Over");
     }
 
     public boolean isJustAte() {
@@ -287,6 +298,14 @@ public class Player {
 
     public void setJustAte(boolean justAte) {
         this.justAte = justAte;
+        //Add Score. Quizas en display.java
+        //int currScore = 0;
+        //if(justAte) {
+        	//currScore=currScore + (sqrt(2*currScore+1));
+        	//public void paintComponent (Graphics g){
+        		//g2.setColor(Color.BLACK);
+        		//g2.drawint(currScore, 5 , 50);
+        //}
     }
     
     //Method to add tail using "N" key
@@ -296,4 +315,15 @@ public class Player {
     		handler.getWorld().appleOnBoard=true;
     	}
     }
+    public void velocity() {
+    //Method to increase velocity
+        if(handler.getKeyManager().increase) { //O increase velocity
+        	velocity--;}
+    	//Method to decrease velocity
+        if(handler.getKeyManager().decrease) { //I decrease velocity
+        	velocity++;
+        }
+
+    }
+
 }
