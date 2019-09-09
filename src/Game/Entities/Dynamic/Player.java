@@ -4,6 +4,9 @@ import Main.Handler;
 
 import java.awt.*;
 import java.util.Random;
+
+import Display.DisplayScreen;
+
 import java.math.*;
 
 //import Display.DisplayScreen;
@@ -16,7 +19,7 @@ public class Player {
 
     public int lenght; //how many pieces of tail
     public boolean justAte; //true when player eats apple
-    public boolean slowedTime; //true when player slows time
+    public static boolean slowedTime; //true when player slows time
     private Handler handler; //x y coordinates of the head
 
     public int xCoord;
@@ -29,7 +32,8 @@ public class Player {
     //Stores current direction
     public String direction;//is your first name one?
 
-    public int velocity = 5;
+    //bigger velocity makes it slower, smaller velocity makes it faster
+    public int velocity;
 
     
     //colors
@@ -40,11 +44,9 @@ public class Player {
     
     Color snakeDefault = new Color(24, 125, 29);
 	Color appleDefault = new Color(179, 18, 18);
-	Color backgroundDefault = new Color(243, 182, 252);
 	
 	Color timePurple = new Color(64, 0, 128);
 	Color timeYellow = new Color(255, 217, 83);
-	Color timeBackground = new Color(111, 180, 221);
 	
 	Color rottenBrown = new Color(91, 46, 0);
 
@@ -60,6 +62,7 @@ public class Player {
         justAte = false;
         slowedTime = false;
         lenght = 1; //how long is player at start
+        velocity = 3;
 
     }
 
@@ -92,9 +95,15 @@ public class Player {
         	State.setState(handler.getGame().pauseState);
         }
         
+        if(handler.getKeyManager().debug) {
+        	//State.setState(handler.getGame().gameOverState);
+        }
+        
         frameCounter++; //counts how many frames have passed
-        if(frameCounter > 540) {
+        //sets things back to normal after 9s of eating power up
+        if(frameCounter == 540 && getSlowedTime() == true) {
         	setSlowedTime(false);
+        	velocity -= 5;
         	//revert speed back to normal
         	//resume theme music
         }
@@ -158,6 +167,7 @@ public class Player {
             handler.getWorld().body.removeLast(); //removes last piece of the tail from body
             handler.getWorld().body.addFirst(new Tail(x, y,handler)); //adds new tail at the front
             //this creates missing tail segment glitch
+            //kill();
         }
 
     }
@@ -216,12 +226,10 @@ public class Player {
     		//changes snake and apple color while power up is active
         	setSnakeColor(timePurple);
         	setAppleColor(timeYellow);
-        	//change background to timeBackground
     	}
     	else {
     		setSnakeColor(snakeDefault);
         	setAppleColor(appleDefault);
-        	//change background to backgroundDefault
     	}
     }
 
@@ -379,7 +387,7 @@ public class Player {
     	setSlowedTime(true); //changes snake and apple color
     	
     	//stop music
-    	//set speed to slower pace
+    	velocity += 5; //set speed to slower pace
     	//play za warudo sound
 
     	handler.getWorld().slowTimeLocation[xCoord][yCoord]=false; //deletes eaten power up, if true spawns new power up
@@ -426,12 +434,12 @@ public class Player {
         //}
     }
     
-    public boolean getSlowedTime() {
+    public static boolean getSlowedTime() {
     	return slowedTime;
     }
     
     public void setSlowedTime(boolean time) {
-    	this.slowedTime = time;
+    	slowedTime = time;
     }
     
     //Method to add tail using "N" key
@@ -444,7 +452,8 @@ public class Player {
     public void velocity() {
     //Method to increase velocity
         if(handler.getKeyManager().increase) { //O increase velocity
-        	velocity--;}
+        	velocity--;
+        }
     	//Method to decrease velocity
         if(handler.getKeyManager().decrease) { //I decrease velocity
         	velocity++;

@@ -19,6 +19,8 @@ public class KeyManager implements KeyListener {
 	
 	public boolean increase=false; //Key to increase velocity
 	public boolean decrease=false; // Key to decrease velocity
+	
+	public boolean debug=false; //key used to debug methods
 
 	public KeyManager(){
 
@@ -54,6 +56,8 @@ public class KeyManager implements KeyListener {
  		
 		increase = keys[KeyEvent.VK_EQUALS]; //key to increase velocity
 		decrease = keys[KeyEvent.VK_MINUS]; //key to decrease velocity
+		
+		debug = keys[KeyEvent.VK_D];
 
 	}
 
