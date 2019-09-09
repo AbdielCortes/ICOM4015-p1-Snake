@@ -14,6 +14,7 @@ public class Images {
     public static BufferedImage[] butstart;
     public static BufferedImage title;
     public static BufferedImage Pause;
+    public static BufferedImage GameOver;
     public static BufferedImage[] Resume;
     public static BufferedImage[] BTitle;
     public static BufferedImage[] Options;
@@ -30,6 +31,7 @@ public class Images {
 
             title = ImageIO.read(getClass().getResourceAsStream("/Sheets/DioTitleScreen.png"));
             Pause = ImageIO.read(getClass().getResourceAsStream("/Sheets/DioPauseScreen.png"));
+            GameOver = ImageIO.read(getClass().getResourceAsStream("/Sheets/JotaroGameOverScreen.png"));
             Resume[0] = ImageIO.read(getClass().getResourceAsStream("/Buttons/Resume.png"));
             Resume[1] = ImageIO.read(getClass().getResourceAsStream("/Buttons/ResumeP.png"));
             BTitle[0] = ImageIO.read(getClass().getResourceAsStream("/Buttons/BTitle.png"));
