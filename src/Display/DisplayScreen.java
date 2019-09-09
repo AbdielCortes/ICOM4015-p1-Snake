@@ -54,6 +54,8 @@ public class DisplayScreen {
 
         frame.add(canvas);
         frame.pack();
+        
+        
     }
     
     //method to change background color
@@ -68,5 +70,7 @@ public class DisplayScreen {
     public JFrame getFrame(){
         return frame;
     }
+    
+    
 
 }
