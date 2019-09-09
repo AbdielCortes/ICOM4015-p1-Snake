@@ -55,6 +55,11 @@ public class DisplayScreen {
         frame.add(canvas);
         frame.pack();
     }
+    
+    //method to change background color
+    public void setBackgroundColor(Color newColor) {
+    	this.backgroundColor = newColor;
+    }
 
     public Canvas getCanvas(){
         return canvas;
