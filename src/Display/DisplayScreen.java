@@ -16,6 +16,7 @@ public class DisplayScreen {
     private Canvas canvas;
     private String title;
     private int width, height;
+    public Color backgroundColor = new Color(243, 182, 252);
 
     public DisplayScreen(String title, int width, int height){
         this.title = title;
@@ -37,7 +38,7 @@ public class DisplayScreen {
         frame.setBackground(Color.black);
 
         try {
-            frame.setIconImage(ImageIO.read(new File("res/Sheets/icon.png")));
+            frame.setIconImage(ImageIO.read(new File("res/Sheets/HeartIconNoBackgroung.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -48,8 +49,8 @@ public class DisplayScreen {
         canvas.setMinimumSize(new Dimension(width, height));
         canvas.setFocusable(false);
         //------------------------------background color------------------------------------------
-        Color purp = new Color(243, 182, 252);
-        canvas.setBackground(purp);
+        //Color purp = new Color(243, 182, 252);
+        canvas.setBackground(backgroundColor);
 
         frame.add(canvas);
         frame.pack();

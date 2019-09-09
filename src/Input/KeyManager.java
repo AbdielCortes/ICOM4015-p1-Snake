@@ -43,10 +43,10 @@ public class KeyManager implements KeyListener {
 		}
 		
 		//assigns key variables to keyboard keys
-		up = keys[KeyEvent.VK_W];
-		down = keys[KeyEvent.VK_S];
-		left = keys[KeyEvent.VK_A];
-		right = keys[KeyEvent.VK_D];
+		up = keys[KeyEvent.VK_UP];
+		down = keys[KeyEvent.VK_DOWN];
+		left = keys[KeyEvent.VK_LEFT];
+		right = keys[KeyEvent.VK_RIGHT];
 
 		pbutt = keys[KeyEvent.VK_ESCAPE];
 

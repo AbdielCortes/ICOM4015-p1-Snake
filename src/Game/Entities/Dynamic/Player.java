@@ -16,16 +16,32 @@ public class Player {
 
     public int lenght; //how many pieces of tail
     public boolean justAte; //true when player eats apple
+    public boolean justTime; //true when player slows time
     private Handler handler; //x y coordinates of the head
 
     public int xCoord;
     public int yCoord;
 
     public int moveCounter; //how many times the player moved
+    public long frameCounter; //how many frames have gone by
 
     //Stores current direction
     public String direction;//is your first name one?
+
     public int velocity = 5;
+
+    
+    //colors
+    //Color grn = new Color(24, 125, 29);
+    public Color snakeColor = new Color(24, 125, 29);
+    //Color rd = new Color(179, 18, 18);
+    public Color appleColor = new Color(179, 18, 18);
+    
+    Color snakeDefault = new Color(24, 125, 29);
+	Color appleDefault = new Color(179, 18, 18);
+	Color timePurple = new Color(64, 0, 128);
+	Color timeYellow = new Color(196, 98, 0);
+
 
     public Player(Handler handler){
         this.handler = handler;
@@ -44,13 +60,14 @@ public class Player {
             checkCollisionAndMove();
             moveCounter=0; 
         }
-        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_UP) && direction != "Down"){ 
+       
+        if(handler.getKeyManager().up && direction != "Down"){ 
             direction="Up";
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_DOWN) && direction != "Up"){
+        }if(handler.getKeyManager().down && direction != "Up"){
             direction="Down";
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_LEFT) && direction != "Right"){
+        }if(handler.getKeyManager().left && direction != "Right"){
             direction="Left";
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_RIGHT) && direction != "Left"){
+        }if(handler.getKeyManager().right && direction != "Left"){
             direction="Right";
         }
         
@@ -62,6 +79,14 @@ public class Player {
         //pauses game when 'esc' is pressed
         if(handler.getKeyManager().pbutt) {
         	State.setState(handler.getGame().pauseState);
+        }
+        
+        frameCounter++; //counts how many frames have passed
+        if(frameCounter > 540) {
+        	setSnakeColor(snakeDefault);
+        	setAppleColor(appleDefault);
+        	//revert speed back to normal
+        	//resume theme music
         }
     }
 
@@ -107,6 +132,11 @@ public class Player {
         if(handler.getWorld().appleLocation[xCoord][yCoord]){ //eats apple
             Eat();
         }
+        
+        //activates slow time power up when player eats it
+        if(handler.getWorld().slowTimeLocation[xCoord][yCoord]) {
+        	eatSlowTime();
+        }
 
         if(!handler.getWorld().body.isEmpty()) {
             handler.getWorld().playerLocation[handler.getWorld().body.getLast().x][handler.getWorld().body.getLast().y] = false;
@@ -124,17 +154,25 @@ public class Player {
                 
             	//snake color
                 if(playeLocation[i][j]){
-                	Color grn = new Color(24, 125, 29);
-                    g.setColor(grn);
+                    g.setColor(snakeColor);
                     g.fillRect((i*handler.getWorld().GridPixelsize),
                             (j*handler.getWorld().GridPixelsize),
                             handler.getWorld().GridPixelsize,
                             handler.getWorld().GridPixelsize);
                 }
+                
             	//apple color
                 if(handler.getWorld().appleLocation[i][j]){
-                	Color rd = new Color(179, 18, 18);
-                    g.setColor(rd);
+                    g.setColor(appleColor);
+                    g.fillRect((i*handler.getWorld().GridPixelsize),
+                            (j*handler.getWorld().GridPixelsize),
+                            handler.getWorld().GridPixelsize,
+                            handler.getWorld().GridPixelsize);
+                }
+                
+                //slow time color
+                if(handler.getWorld().slowTimeLocation[i][j]){
+                    g.setColor(Color.black);
                     g.fillRect((i*handler.getWorld().GridPixelsize),
                             (j*handler.getWorld().GridPixelsize),
                             handler.getWorld().GridPixelsize,
@@ -145,6 +183,16 @@ public class Player {
         }
 
 
+    }
+    
+    //method that changes snake color
+    public void setSnakeColor(Color newColor) {
+    	this.snakeColor = newColor;
+    }
+    
+    //method that changes apple color
+    public void setAppleColor(Color newColor) {
+    	this.appleColor = newColor;
     }
 
     public void Eat(){ //used to add tail piece
@@ -275,6 +323,33 @@ public class Player {
         handler.getWorld().playerLocation[tail.x][tail.y] = true;
         
         
+    }
+    
+    //method to slow snake speed when it eats power up
+    //place inside Player->checkColisionsAndMove
+    public void eatSlowTime() {
+    	setFrameCounter(0);
+    	long frames = getFrameCounter();
+    	
+    	//540frames = 9seconds
+    	//changes snake and apple color while power up is active
+    	if(frames <= 540) {
+        	setSnakeColor(timePurple);
+        	setAppleColor(timeYellow);
+        	//stop music
+        	//set speed to slower pace
+        	//play za warudo sound
+        }
+
+    	handler.getWorld().slowTimeLocation[xCoord][yCoord]=false; //deletes eaten power up, if true spawns new power up
+        handler.getWorld().slowTimeOnBoard=false; //tells that a new power up needs to be generated
+    }
+    
+    public void setFrameCounter(long setFrame) {
+    	this.frameCounter = setFrame;
+    }
+    public long getFrameCounter() {
+    	return frameCounter;
     }
 
     public void kill(){
