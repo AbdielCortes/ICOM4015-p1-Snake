@@ -3,10 +3,10 @@ package Game.Entities.Dynamic;
 import Main.Handler;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.util.Random;
 import java.math.*;
 
+//import Display.DisplayScreen;
 import Game.GameStates.State;
 
 /**
@@ -16,7 +16,7 @@ public class Player {
 
     public int lenght; //how many pieces of tail
     public boolean justAte; //true when player eats apple
-    public boolean justTime; //true when player slows time
+    public boolean slowedTime; //true when player slows time
     private Handler handler; //x y coordinates of the head
 
     public int xCoord;
@@ -24,6 +24,7 @@ public class Player {
 
     public int moveCounter; //how many times the player moved
     public long frameCounter; //how many frames have gone by
+    public long stepCounter; //how many steps has the snake taken
 
     //Stores current direction
     public String direction;//is your first name one?
@@ -39,8 +40,13 @@ public class Player {
     
     Color snakeDefault = new Color(24, 125, 29);
 	Color appleDefault = new Color(179, 18, 18);
+	Color backgroundDefault = new Color(243, 182, 252);
+	
 	Color timePurple = new Color(64, 0, 128);
-	Color timeYellow = new Color(196, 98, 0);
+	Color timeYellow = new Color(255, 217, 83);
+	Color timeBackground = new Color(111, 180, 221);
+	
+	Color rottenBrown = new Color(91, 46, 0);
 
 
     public Player(Handler handler){
@@ -48,9 +54,12 @@ public class Player {
         xCoord = 0;
         yCoord = 0;
         moveCounter = 0;
+        frameCounter = 0;
+        stepCounter = 0;
         direction= "Right";
         justAte = false;
-        lenght= 1; //how long is player at start
+        slowedTime = false;
+        lenght = 1; //how long is player at start
 
     }
 
@@ -59,6 +68,8 @@ public class Player {
         if(moveCounter>=velocity) { //every five frames the snake moves, changes snake speed
             checkCollisionAndMove();
             moveCounter=0; 
+            stepCounter++;
+            //System.out.println(stepCounter);
         }
        
         if(handler.getKeyManager().up && direction != "Down"){ 
@@ -85,11 +96,14 @@ public class Player {
         
         frameCounter++; //counts how many frames have passed
         if(frameCounter > 540) {
-        	setSnakeColor(snakeDefault);
-        	setAppleColor(appleDefault);
+        	setSlowedTime(false);
         	//revert speed back to normal
         	//resume theme music
         }
+        
+        timeState(); //sets color of snake and apple depending on whether time is slowed or not
+        
+        isGood(); //checks if apple is rotten or not
     }
 
     public void checkCollisionAndMove(){
@@ -133,6 +147,7 @@ public class Player {
 
         if(handler.getWorld().appleLocation[xCoord][yCoord]){ //eats apple
             Eat();
+            setJustAte(true);
         }
         
         //activates slow time power up when player eats it
@@ -195,6 +210,21 @@ public class Player {
     //method that changes apple color
     public void setAppleColor(Color newColor) {
     	this.appleColor = newColor;
+    }
+    
+  //method to change apple  and snake color depending if time is slowed or not
+    public void timeState() {
+    	if(slowedTime) {
+    		//changes snake and apple color while power up is active
+        	setSnakeColor(timePurple);
+        	setAppleColor(timeYellow);
+        	//change background to timeBackground
+    	}
+    	else {
+    		setSnakeColor(snakeDefault);
+        	setAppleColor(appleDefault);
+        	//change background to backgroundDefault
+    	}
     }
 
     public void Eat(){ //used to add tail piece
@@ -327,32 +357,37 @@ public class Player {
         
     }
     
+    public void isGood() {
+    	if(stepCounter >= 200) { //apple is bad if player walks 200steps
+    		//System.out.println("bad");
+    		setAppleColor(rottenBrown); //changes apple color to brown
+    		//decrease score
+    		//lose tail
+    		//lenght--;
+    		
+    	}
+    	if(getJustAte()) { //if player eats apple reset stepCounter
+    		//System.out.println("yummy");
+    		stepCounter = 0;
+    		setJustAte(false);
+    	}
+    }
+    
     //method to slow snake speed when it eats power up
     //place inside Player->checkColisionsAndMove
     public void eatSlowTime() {
-    	setFrameCounter(0);
-    	long frames = getFrameCounter();
     	
-    	//540frames = 9seconds
-    	//changes snake and apple color while power up is active
-    	if(frames <= 540) {
-        	setSnakeColor(timePurple);
-        	setAppleColor(timeYellow);
-        	//stop music
-        	//set speed to slower pace
-        	//play za warudo sound
-        }
+    	setFrameCounter(0); //starts timer at 0
+    	setSlowedTime(true); //changes snake and apple color
+    	
+    	//stop music
+    	//set speed to slower pace
+    	//play za warudo sound
 
     	handler.getWorld().slowTimeLocation[xCoord][yCoord]=false; //deletes eaten power up, if true spawns new power up
         handler.getWorld().slowTimeOnBoard=false; //tells that a new power up needs to be generated
     }
     
-    public void setFrameCounter(long setFrame) {
-    	this.frameCounter = setFrame;
-    }
-    public long getFrameCounter() {
-    	return frameCounter;
-    }
 
     public void kill(){
         lenght = 0;
@@ -365,8 +400,16 @@ public class Player {
         }
 
     }
+    
+    
+    public void setFrameCounter(long setFrame) {
+    	this.frameCounter = setFrame;
+    }
+    public long getFrameCounter() {
+    	return frameCounter;
+    }
 
-    public boolean isJustAte() {
+    public boolean getJustAte() {
         return justAte;
     }
 
@@ -380,6 +423,14 @@ public class Player {
         		//g2.setColor(Color.BLACK);
         		//g2.drawint(currScore, 5 , 50);
         //}
+    }
+    
+    public boolean getSlowedTime() {
+    	return slowedTime;
+    }
+    
+    public void setSlowedTime(boolean time) {
+    	this.slowedTime = time;
     }
     
     //Method to add tail using "N" key

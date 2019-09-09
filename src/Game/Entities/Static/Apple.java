@@ -18,5 +18,4 @@ public class Apple {
         this.yCoord=y;
     }
 
-
 }

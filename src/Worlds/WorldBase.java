@@ -63,20 +63,20 @@ public abstract class WorldBase {
 
 
     }
+    
+    //method that generates grid, code originally inside WorldBase->render
+    public void createGrid(Graphics g) {
+    	for (int i = 0; i <= windowPixelSize; i = i + GridPixelsize) { //draws grid lines
+    		Color bl = new Color(73, 73, 243); //grid color
+    		g.setColor(bl);
+    		g.drawLine(0, i, handler.getWidth() , i);
+    		g.drawLine(i,0,i,handler.getHeight());
+
+    	}
+    }
 
     public void render(Graphics g){
-
-        for (int i = 0; i <= windowPixelSize; i = i + GridPixelsize) { //draws grid lines
-        	
-        	//---------------------------grid color------------------------------------------------
-        	Color purp = new Color(243, 182, 252);
-            g.setColor(purp);
-            g.drawLine(0, i, handler.getWidth() , i);
-            g.drawLine(i,0,i,handler.getHeight());
-
-        }
-
-
+    	//createGrid(g); //creates background grid
 
     }
 
