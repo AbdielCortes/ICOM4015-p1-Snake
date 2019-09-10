@@ -401,8 +401,8 @@ public class Player {
     	setFrameCounter(0); //starts timer at 0
     	setSlowedTime(true); //changes snake and apple color
     	
-    	//stop music
     	velocity += 5; //set speed to slower pace
+    	//GameSetUp.stopMusic(); //stop music
     	playSound("/music/ZaWarudo.wav");//play za warudo sound
 
     	handler.getWorld().slowTimeLocation[xCoord][yCoord]=false; //deletes eaten power up, if true spawns new power up
