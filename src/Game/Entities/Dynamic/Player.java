@@ -1,5 +1,6 @@
 package Game.Entities.Dynamic;
 
+import Main.GameSetUp;
 import Main.Handler;
 
 import java.awt.*;
@@ -85,13 +86,14 @@ public class Player {
         
         //pauses game when 'esc' is pressed
         if(handler.getKeyManager().pbutt) {
-        	State.setState(handler.getGame().pauseState);
+        	//State.setState(handler.getGame().pauseState);
+        	//GameSetUp.playMusic();
         }
         
         //uses 'd' key to test methods
         if(handler.getKeyManager().debug) {
-        	State.setState(handler.getGame().gameOverState);
-        	playSound("/music/ToBeContinued.wav");
+        	//some code
+        	//GameSetUp.stopMusic();
         }
         
         frameCounter++; //counts how many frames have passed
@@ -158,7 +160,13 @@ public class Player {
                 }
                 break;
         }
-        handler.getWorld().playerLocation[xCoord][yCoord]=true;
+        //antes de esto if pa chequear si ya culebra estaba ahi
+        if(handler.getWorld().playerLocation[xCoord][yCoord]==true) {
+        	kill();
+        }
+        else {
+        	handler.getWorld().playerLocation[xCoord][yCoord]=true;
+        }
 
 
         if(handler.getWorld().appleLocation[xCoord][yCoord]){ //eats apple
@@ -377,7 +385,6 @@ public class Player {
     		setAppleColor(rottenBrown); //changes apple color to brown
     		//decrease score
     		//lose tail
-    		//lenght--;
     		
     	}
     	if(getJustAte()) { //if player eats apple reset stepCounter
@@ -413,6 +420,7 @@ public class Player {
             }
         }
         State.setState(handler.getGame().gameOverState);
+        playSound("/music/ToBeContinued.wav");
 
     }
     
