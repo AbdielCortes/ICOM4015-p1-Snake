@@ -93,8 +93,8 @@ public class GameSetUp implements Runnable {
             format = audioStream.getFormat();
             info = new DataLine.Info(Clip.class, format);
             audioClip = (Clip) AudioSystem.getLine(info);
-            audioClip.open(audioStream);
-            audioClip.loop(Clip.LOOP_CONTINUOUSLY);
+            //audioClip.open(audioStream);
+            //audioClip.loop(Clip.LOOP_CONTINUOUSLY);
 
         } catch (UnsupportedAudioFileException e) {
             e.printStackTrace();

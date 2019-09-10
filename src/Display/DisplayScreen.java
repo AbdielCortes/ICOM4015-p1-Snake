@@ -48,9 +48,7 @@ public class DisplayScreen {
         canvas.setMaximumSize(new Dimension(width, height));
         canvas.setMinimumSize(new Dimension(width, height));
         canvas.setFocusable(false);
-        //------------------------------background color------------------------------------------
-        //Color purp = new Color(243, 182, 252);
-        canvas.setBackground(backgroundColor);
+        canvas.setBackground(backgroundColor); //Background color
 
         frame.add(canvas);
         frame.pack();

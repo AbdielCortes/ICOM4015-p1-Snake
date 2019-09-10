@@ -3,9 +3,10 @@ package Game.Entities.Dynamic;
 import Main.Handler;
 
 import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Random;
-
-import Display.DisplayScreen;
+import javax.sound.sampled.*;
 
 import java.math.*;
 
@@ -74,16 +75,8 @@ public class Player {
             stepCounter++;
             //System.out.println(stepCounter);
         }
-       
-        if(handler.getKeyManager().up && direction != "Down"){ 
-            direction="Up";
-        }if(handler.getKeyManager().down && direction != "Up"){
-            direction="Down";
-        }if(handler.getKeyManager().left && direction != "Right"){
-            direction="Left";
-        }if(handler.getKeyManager().right && direction != "Left"){
-            direction="Right";
-        }
+        
+        movePreventBacktracking(); //prevents snake from backing up on itself
         
         addTail(); //adds tail piece when n key is pressed
         //Method to increase velocity
@@ -93,12 +86,12 @@ public class Player {
         //pauses game when 'esc' is pressed
         if(handler.getKeyManager().pbutt) {
         	State.setState(handler.getGame().pauseState);
-        	//abre game over
-        	//State.setState(handler.getGame().gameOverState);
         }
         
+        //uses 'd' key to test methods
         if(handler.getKeyManager().debug) {
-        	//State.setState(handler.getGame().gameOverState);
+        	State.setState(handler.getGame().gameOverState);
+        	playSound("/music/ToBeContinued.wav");
         }
         
         frameCounter++; //counts how many frames have passed
@@ -113,6 +106,20 @@ public class Player {
         timeState(); //sets color of snake and apple depending on whether time is slowed or not
         
         isGood(); //checks if apple is rotten or not
+    }
+    
+    //prevents snake from backing up on itself
+    //code originally in Player->tick
+    public void movePreventBacktracking() {
+    	if(handler.getKeyManager().up && direction != "Down"){ 
+            direction="Up";
+        }if(handler.getKeyManager().down && direction != "Up"){
+            direction="Down";
+        }if(handler.getKeyManager().left && direction != "Right"){
+            direction="Left";
+        }if(handler.getKeyManager().right && direction != "Left"){
+            direction="Right";
+        }
     }
 
     public void checkCollisionAndMove(){
@@ -169,7 +176,6 @@ public class Player {
             handler.getWorld().body.removeLast(); //removes last piece of the tail from body
             handler.getWorld().body.addFirst(new Tail(x, y,handler)); //adds new tail at the front
             //this creates missing tail segment glitch
-            //kill();
         }
 
     }
@@ -390,7 +396,7 @@ public class Player {
     	
     	//stop music
     	velocity += 5; //set speed to slower pace
-    	//play za warudo sound
+    	playSound("/music/ZaWarudo.wav");//play za warudo sound
 
     	handler.getWorld().slowTimeLocation[xCoord][yCoord]=false; //deletes eaten power up, if true spawns new power up
         handler.getWorld().slowTimeOnBoard=false; //tells that a new power up needs to be generated
@@ -401,20 +407,21 @@ public class Player {
         lenght = 0;
         for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
             for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
-
-                handler.getWorld().playerLocation[i][j]=false;
-                State.setState(handler.getGame().gameOverState);
+            	//if(tailLocation == handler.getWorld().playerLocation[i][j]) {
+                	handler.getWorld().playerLocation[i][j]=false;
+            	//}
             }
         }
+        State.setState(handler.getGame().gameOverState);
 
     }
     
+    public long getFrameCounter() {
+    	return frameCounter;
+    }
     
     public void setFrameCounter(long setFrame) {
     	this.frameCounter = setFrame;
-    }
-    public long getFrameCounter() {
-    	return frameCounter;
     }
 
     public boolean getJustAte() {
@@ -448,16 +455,43 @@ public class Player {
     		handler.getWorld().appleOnBoard=true;
     	}
     }
+    
+    //Method to increase velocity with '+' and decrease velocity with '-'
     public void velocity() {
-    //Method to increase velocity
-        if(handler.getKeyManager().increase) { //O increase velocity
+        if(handler.getKeyManager().increase) { //increase velocity
         	velocity--;
         }
-    	//Method to decrease velocity
-        if(handler.getKeyManager().decrease) { //I decrease velocity
+        
+        if(handler.getKeyManager().decrease) { //decrease velocity
         	velocity++;
         }
+    }
+    
+    //method to play sounds
+    public void playSound(String fileLocation) {
+    	//play sound
+    	InputStream audioFile;
+        AudioInputStream audioStream;
+        AudioFormat format;
+        DataLine.Info info;
+        Clip audioClip;
+        
+        try {
+            audioFile = getClass().getResourceAsStream(fileLocation); //game music
+            audioStream = AudioSystem.getAudioInputStream(audioFile);
+            format = audioStream.getFormat();
+            info = new DataLine.Info(Clip.class, format);
+            audioClip = (Clip) AudioSystem.getLine(info);
+            audioClip.open(audioStream);
+            audioClip.loop(0);
 
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (LineUnavailableException e) {
+            e.printStackTrace();
+        }
     }
 
 }
