@@ -42,7 +42,7 @@ public class Images {
             butstart[1]= ImageIO.read(getClass().getResourceAsStream("/Buttons/HoverButton.png"));//hoverbut
             butstart[2]= ImageIO.read(getClass().getResourceAsStream("/Buttons/ClickedButton.png"));//clickbut
 
-            icon =  new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/Sheets/HeartIconNoBackgroung.png")));
+            icon =  new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/Sheets/HeartIcon.png")));
 
 
         }catch (IOException e) {

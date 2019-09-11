@@ -38,7 +38,7 @@ public class DisplayScreen {
         frame.setBackground(Color.black);
 
         try {
-            frame.setIconImage(ImageIO.read(new File("res/Sheets/HeartIconNoBackgroung.png")));
+            frame.setIconImage(ImageIO.read(new File("res/Sheets/HeartIcon.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
