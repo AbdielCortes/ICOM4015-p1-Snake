@@ -1,6 +1,5 @@
 package Game.Entities.Dynamic;
 
-import Main.GameSetUp;
 import Main.Handler;
 import Resources.Images;
 
@@ -49,7 +48,7 @@ public class Player {
 	Color appleDefault = new Color(179, 18, 18);
 	
 	Color timePurple = new Color(64, 0, 128);
-	Color timeYellow = new Color(255, 217, 83);
+	Color timeYellow = new Color(251, 171, 4);
 	
 	Color rottenBrown = new Color(91, 46, 0);
 
@@ -75,39 +74,30 @@ public class Player {
             checkCollisionAndMove();
             moveCounter=0; 
             stepCounter++;
-            //System.out.println(stepCounter);
         }
-        
-        movePreventBacktracking(); //prevents snake from backing up on itself
-        
-        addTail(); //adds tail piece when n key is pressed
-        //Method to increase velocity
-        
-        velocity();
         
         //pauses game when 'esc' is pressed
         if(handler.getKeyManager().pbutt) {
-        	//State.setState(handler.getGame().pauseState);
-        	//GameSetUp.playMusic();
+        	State.setState(handler.getGame().pauseState);
         }
         
         //uses 'd' key to test methods
         if(handler.getKeyManager().debug) {
         	//some code
-        	//GameSetUp.stopMusic();
         }
         
         frameCounter++; //counts how many frames have passed
         //sets things back to normal after 9s of eating power up
         if(frameCounter == 540 && getSlowedTime() == true) {
         	setSlowedTime(false);
-        	velocity -= 5;
-        	//revert speed back to normal
+        	velocity -= 5; //reverts speed back to normal
         	//resume theme music
         }
         
+        movePreventBacktracking(); //prevents snake from backing up on itself
+        addTail(); //adds tail piece when n key is pressed     
+        velocity(); //changes velocity with '+' and '-'
         timeState(); //sets color of snake and apple depending on whether time is slowed or not
-        
         isGood(); //checks if apple is rotten or not
 
     }
@@ -162,12 +152,13 @@ public class Player {
                 }
                 break;
         }
-        //antes de esto if pa chequear si ya culebra estaba ahi
+        
+        //kills snake if it collides with itself
         if(handler.getWorld().playerLocation[xCoord][yCoord]==true) {
         	kill();
         }
         else {
-        	handler.getWorld().playerLocation[xCoord][yCoord]=true;
+        	handler.getWorld().playerLocation[xCoord][yCoord] = true;
         }
 
 
@@ -183,7 +174,7 @@ public class Player {
         	eatSlowTime();
         }
 
-        if(!handler.getWorld().body.isEmpty()) { //chequear
+        if(!handler.getWorld().body.isEmpty()) { 
             handler.getWorld().playerLocation[handler.getWorld().body.getLast().x][handler.getWorld().body.getLast().y] = false;
             handler.getWorld().body.removeLast(); //removes last piece of the tail from body
             handler.getWorld().body.addFirst(new Tail(x, y,handler)); //adds new tail at the front
@@ -253,6 +244,7 @@ public class Player {
         	setAppleColor(timeYellow);
     	}
     	else {
+    		//playSoundContinously("/music/DioTheme.wav");
     		setSnakeColor(snakeDefault);
         	setAppleColor(appleDefault);
     	}
@@ -411,8 +403,8 @@ public class Player {
     	setSlowedTime(true); //changes snake and apple color
     	
     	velocity += 5; //set speed to slower pace
-    	//GameSetUp.stopMusic(); //stop music
-    	playSound("/music/ZaWarudo.wav");//play za warudo sound
+    	//stop music
+    	playSound("/music/ZaWarudo.wav"); //play za warudo sound
 
     	handler.getWorld().slowTimeLocation[xCoord][yCoord]=false; //deletes eaten power up, if true spawns new power up
         handler.getWorld().slowTimeOnBoard=false; //tells that a new power up needs to be generated
@@ -464,8 +456,8 @@ public class Player {
     //Method to add tail using "N" key
     public void addTail() {
     	if(handler.getKeyManager().tail) {
-    		Eat();
-    		handler.getWorld().appleOnBoard=true;
+    		lenght++;
+    		handler.getWorld().body.addFirst(new Tail(xCoord, yCoord, handler));	
     	}
     }
     
@@ -506,6 +498,31 @@ public class Player {
             e.printStackTrace();
         }
     }
+    
+//    public void playSoundContinously(String fileLocation) {
+//    	//play sound
+//    	InputStream audioFile;
+//        AudioInputStream audioStream;
+//        AudioFormat format;
+//        DataLine.Info info;
+//        Clip audioClip;
+//        
+//        try {
+//            audioFile = getClass().getResourceAsStream(fileLocation); //game music
+//            audioStream = AudioSystem.getAudioInputStream(audioFile);
+//            format = audioStream.getFormat();
+//            info = new DataLine.Info(Clip.class, format);
+//            audioClip = (Clip) AudioSystem.getLine(info);
+//            audioClip.open(audioStream);
+//            audioClip.loop(Clip.LOOP_CONTINUOUSLY);
+//        } catch (UnsupportedAudioFileException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (LineUnavailableException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
 }
