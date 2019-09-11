@@ -50,10 +50,10 @@ public class GameSetUp implements Runnable {
 
     //Res.music
     private InputStream audioFile;
-    private AudioInputStream audioStream;
+    private static AudioInputStream audioStream;
     private AudioFormat format;
     private DataLine.Info info;
-    private Clip audioClip;
+    private static Clip audioClip;
 
     private BufferedImage loading;
 
@@ -95,6 +95,7 @@ public class GameSetUp implements Runnable {
             audioClip = (Clip) AudioSystem.getLine(info);
             audioClip.open(audioStream);
             audioClip.loop(Clip.LOOP_CONTINUOUSLY);
+            //poner funcion de close cuando se coma power up
 
         } catch (UnsupportedAudioFileException e) {
             e.printStackTrace();
@@ -104,6 +105,21 @@ public class GameSetUp implements Runnable {
             e.printStackTrace();
         }
     }
+    
+//    public static void stopMusic() {
+//    	audioClip.close();
+//    }
+//    
+//    public static void playMusic() {
+//    	try {
+//    		audioClip.open(audioStream);
+//    		audioClip.loop(Clip.LOOP_CONTINUOUSLY);
+//    	} catch (IOException e) {
+//    		e.printStackTrace();
+//    	} catch (LineUnavailableException e) {
+//    		e.printStackTrace();
+//    	}
+//    }
 
     public void reStart(){
         gameState = new GameState(handler);

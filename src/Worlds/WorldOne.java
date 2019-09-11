@@ -1,5 +1,6 @@
 package Worlds;
 
+import Game.Entities.Dynamic.Player;
 import Game.Entities.Static.Apple;
 import Game.Entities.Static.SlowTime;
 
@@ -42,7 +43,8 @@ public class WorldOne extends WorldBase{
 //        	spawnApple(); //spawns apple in a random x and y
 //        }
         
-        if(!slowTimeOnBoard) {
+        //spawn power up if there isn't one on the board and if time isn't already slowed
+        if(!slowTimeOnBoard && Player.getSlowedTime() == false) {
         	slowTimeOnBoard = true; //sets state of power up as present
         	spawnSlowTime(); //spawns power up in a random x and y
         }

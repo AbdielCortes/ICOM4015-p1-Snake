@@ -1,10 +1,15 @@
 package Game.Entities.Dynamic;
 
+import Main.GameSetUp;
 import Main.Handler;
 import Resources.Images;
 
 import java.awt.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Random;
+import javax.sound.sampled.*;
+
 import java.math.*;
 
 //import Display.DisplayScreen;
@@ -17,7 +22,7 @@ public class Player {
 
     public int lenght; //how many pieces of tail
     public boolean justAte; //true when player eats apple
-    public boolean slowedTime; //true when player slows time
+    public static boolean slowedTime; //true when player slows time
     private Handler handler; //x y coordinates of the head
 
     public int xCoord;
@@ -30,23 +35,21 @@ public class Player {
     //Stores current direction
     public String direction;//is your first name one?
 
-    public int velocity = 5;
+
     public double currScore = 0;
+    //bigger velocity makes it slower, smaller velocity makes it faster
+    public int velocity;
 
     
     //colors
-    //Color grn = new Color(24, 125, 29);
     public Color snakeColor = new Color(24, 125, 29);
-    //Color rd = new Color(179, 18, 18);
     public Color appleColor = new Color(179, 18, 18);
     
     Color snakeDefault = new Color(24, 125, 29);
 	Color appleDefault = new Color(179, 18, 18);
-	Color backgroundDefault = new Color(243, 182, 252);
 	
 	Color timePurple = new Color(64, 0, 128);
 	Color timeYellow = new Color(255, 217, 83);
-	Color timeBackground = new Color(111, 180, 221);
 	
 	Color rottenBrown = new Color(91, 46, 0);
 
@@ -62,6 +65,7 @@ public class Player {
         justAte = false;
         slowedTime = false;
         lenght = 1; //how long is player at start
+        velocity = 3;
 
     }
 
@@ -73,16 +77,8 @@ public class Player {
             stepCounter++;
             //System.out.println(stepCounter);
         }
-       
-        if(handler.getKeyManager().up && direction != "Down"){ 
-            direction="Up";
-        }if(handler.getKeyManager().down && direction != "Up"){
-            direction="Down";
-        }if(handler.getKeyManager().left && direction != "Right"){
-            direction="Left";
-        }if(handler.getKeyManager().right && direction != "Left"){
-            direction="Right";
-        }
+        
+        movePreventBacktracking(); //prevents snake from backing up on itself
         
         addTail(); //adds tail piece when n key is pressed
         //Method to increase velocity
@@ -91,14 +87,21 @@ public class Player {
         
         //pauses game when 'esc' is pressed
         if(handler.getKeyManager().pbutt) {
-        	State.setState(handler.getGame().pauseState);
-        	//abre game over
-        	//State.setState(handler.getGame().gameOverState);
+        	//State.setState(handler.getGame().pauseState);
+        	//GameSetUp.playMusic();
+        }
+        
+        //uses 'd' key to test methods
+        if(handler.getKeyManager().debug) {
+        	//some code
+        	//GameSetUp.stopMusic();
         }
         
         frameCounter++; //counts how many frames have passed
-        if(frameCounter > 540) {
+        //sets things back to normal after 9s of eating power up
+        if(frameCounter == 540 && getSlowedTime() == true) {
         	setSlowedTime(false);
+        	velocity -= 5;
         	//revert speed back to normal
         	//resume theme music
         }
@@ -106,6 +109,20 @@ public class Player {
         timeState(); //sets color of snake and apple depending on whether time is slowed or not
         
         isGood(); //checks if apple is rotten or not
+    }
+    
+    //prevents snake from backing up on itself
+    //code originally in Player->tick
+    public void movePreventBacktracking() {
+    	if(handler.getKeyManager().up && direction != "Down"){ 
+            direction="Up";
+        }if(handler.getKeyManager().down && direction != "Up"){
+            direction="Down";
+        }if(handler.getKeyManager().left && direction != "Right"){
+            direction="Left";
+        }if(handler.getKeyManager().right && direction != "Left"){
+            direction="Right";
+        }
     }
 
     public void checkCollisionAndMove(){
@@ -144,7 +161,13 @@ public class Player {
                 }
                 break;
         }
-        handler.getWorld().playerLocation[xCoord][yCoord]=true;
+        //antes de esto if pa chequear si ya culebra estaba ahi
+        if(handler.getWorld().playerLocation[xCoord][yCoord]==true) {
+        	kill();
+        }
+        else {
+        	handler.getWorld().playerLocation[xCoord][yCoord]=true;
+        }
 
 
         if(handler.getWorld().appleLocation[xCoord][yCoord]){ //eats apple
@@ -225,12 +248,10 @@ public class Player {
     		//changes snake and apple color while power up is active
         	setSnakeColor(timePurple);
         	setAppleColor(timeYellow);
-        	//change background to timeBackground
     	}
     	else {
     		setSnakeColor(snakeDefault);
         	setAppleColor(appleDefault);
-        	//change background to backgroundDefault
     	}
     }
 
@@ -370,7 +391,6 @@ public class Player {
     		setAppleColor(rottenBrown); //changes apple color to brown
     		//decrease score
     		//lose tail
-    		//lenght--;
     		
     	}
     	if(getJustAte()) { //if player eats apple reset stepCounter
@@ -387,9 +407,9 @@ public class Player {
     	setFrameCounter(0); //starts timer at 0
     	setSlowedTime(true); //changes snake and apple color
     	
-    	//stop music
-    	//set speed to slower pace
-    	//play za warudo sound
+    	velocity += 5; //set speed to slower pace
+    	//GameSetUp.stopMusic(); //stop music
+    	playSound("/music/ZaWarudo.wav");//play za warudo sound
 
     	handler.getWorld().slowTimeLocation[xCoord][yCoord]=false; //deletes eaten power up, if true spawns new power up
         handler.getWorld().slowTimeOnBoard=false; //tells that a new power up needs to be generated
@@ -400,20 +420,20 @@ public class Player {
         lenght = 0;
         for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
             for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
-
                 handler.getWorld().playerLocation[i][j]=false;
-                State.setState(handler.getGame().gameOverState);//tiene que chocar
             }
         }
+        State.setState(handler.getGame().gameOverState);
+        playSound("/music/ToBeContinued.wav");
 
     }
     
+    public long getFrameCounter() {
+    	return frameCounter;
+    }
     
     public void setFrameCounter(long setFrame) {
     	this.frameCounter = setFrame;
-    }
-    public long getFrameCounter() {
-    	return frameCounter;
     }
 
     public boolean getJustAte() {
@@ -446,12 +466,12 @@ public class Player {
         		//g.drawString("string here", currScore, 5 , 50);
         //}
     
-    public boolean getSlowedTime() {
+    public static boolean getSlowedTime() {
     	return slowedTime;
     }
     
     public void setSlowedTime(boolean time) {
-    	this.slowedTime = time;
+    	slowedTime = time;
     }
     
     //Method to add tail using "N" key
@@ -461,15 +481,43 @@ public class Player {
     		handler.getWorld().appleOnBoard=true;
     	}
     }
+    
+    //Method to increase velocity with '+' and decrease velocity with '-'
     public void velocity() {
-    //Method to increase velocity
-        if(handler.getKeyManager().increase) { //O increase velocity
-        	velocity--;}
-    	//Method to decrease velocity
-        if(handler.getKeyManager().decrease) { //I decrease velocity
+        if(handler.getKeyManager().increase) { //increase velocity
+        	velocity--;
+        }
+        
+        if(handler.getKeyManager().decrease) { //decrease velocity
         	velocity++;
         }
+    }
+    
+    //method to play sounds
+    public void playSound(String fileLocation) {
+    	//play sound
+    	InputStream audioFile;
+        AudioInputStream audioStream;
+        AudioFormat format;
+        DataLine.Info info;
+        Clip audioClip;
+        
+        try {
+            audioFile = getClass().getResourceAsStream(fileLocation); //game music
+            audioStream = AudioSystem.getAudioInputStream(audioFile);
+            format = audioStream.getFormat();
+            info = new DataLine.Info(Clip.class, format);
+            audioClip = (Clip) AudioSystem.getLine(info);
+            audioClip.open(audioStream);
+            audioClip.loop(0);
 
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (LineUnavailableException e) {
+            e.printStackTrace();
+        }
     }
 
 
