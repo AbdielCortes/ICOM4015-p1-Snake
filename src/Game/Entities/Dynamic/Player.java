@@ -440,9 +440,10 @@ public class Player {
     }
 
     public void Score(Graphics g) {
+    	String currS = String.format("%.2f", currScore);
     	g.setFont(new Font("TimesNewRoman", Font.PLAIN, 20));
         g.setColor(Color.BLACK);     	
-    	g.drawString("Score", 25, 25);
+    	g.drawString("Score: "+currS, 350, 25);
     } 
     
     public static boolean getSlowedTime() {
