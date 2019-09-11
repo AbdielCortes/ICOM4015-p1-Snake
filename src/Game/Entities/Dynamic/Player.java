@@ -109,6 +109,7 @@ public class Player {
         timeState(); //sets color of snake and apple depending on whether time is slowed or not
         
         isGood(); //checks if apple is rotten or not
+
     }
     
     //prevents snake from backing up on itself
@@ -173,6 +174,8 @@ public class Player {
         if(handler.getWorld().appleLocation[xCoord][yCoord]){ //eats apple
             Eat();
             setJustAte(true);
+            currScore=currScore + (Math.sqrt(2*currScore+1));
+            //System.out.println(currScore);
         }
         
         //activates slow time power up when player eats it
@@ -441,30 +444,14 @@ public class Player {
     }
 
     public void setJustAte(boolean justAte) {
-//        double currScore = 0;
         this.justAte = justAte;
-        if(handler.getWorld().appleLocation[xCoord][yCoord]=false) {
-        	 currScore=currScore + (Math.sqrt(2*currScore+1));}
     }
-//        } 
+
     public void Score(Graphics g) {
     	g.setFont(new Font("TimesNewRoman", Font.PLAIN, 20));
         g.setColor(Color.BLACK);     	
-    	g.drawString("Score", 25,25);
+    	g.drawString("Score", 25, 25);
     } 
-    
-    
-
- 
-//       uiManager.Score(g);
-    //Add Score. Quizas en display.java
-       
-        	//public void paintComponent (Graphics g){
-        		
-        		//g.setFont(new Font("style",type, size));
-        		//g.setColor(Color.BLACK);
-        		//g.drawString("string here", currScore, 5 , 50);
-        //}
     
     public static boolean getSlowedTime() {
     	return slowedTime;
