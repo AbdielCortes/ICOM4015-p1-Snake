@@ -1,6 +1,7 @@
 package Game.Entities.Dynamic;
 
 import Main.Handler;
+import Resources.Images;
 
 import java.awt.*;
 import java.util.Random;
@@ -30,6 +31,7 @@ public class Player {
     public String direction;//is your first name one?
 
     public int velocity = 5;
+    public double currScore = 0;
 
     
     //colors
@@ -161,6 +163,10 @@ public class Player {
             handler.getWorld().body.addFirst(new Tail(x, y,handler)); //adds new tail at the front
             //this creates missing tail segment glitch
         }
+            
+//        if(!handler.getWorld().body.isEmpty()) { 
+//            State.setState(handler.getGame().gameOverState);
+//            }
 
     }
 
@@ -198,7 +204,8 @@ public class Player {
 
             }
         }
-
+        
+        Score(g);
 
     }
     
@@ -395,7 +402,7 @@ public class Player {
             for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
 
                 handler.getWorld().playerLocation[i][j]=false;
-                State.setState(handler.getGame().gameOverState);
+                State.setState(handler.getGame().gameOverState);//tiene que chocar
             }
         }
 
@@ -414,16 +421,30 @@ public class Player {
     }
 
     public void setJustAte(boolean justAte) {
+//        double currScore = 0;
         this.justAte = justAte;
-        //Add Score. Quizas en display.java
-        //int currScore = 0;
-        //if(justAte) {
-        	//currScore=currScore + (sqrt(2*currScore+1));
-        	//public void paintComponent (Graphics g){
-        		//g2.setColor(Color.BLACK);
-        		//g2.drawint(currScore, 5 , 50);
-        //}
+        if(handler.getWorld().appleLocation[xCoord][yCoord]=false) {
+        	 currScore=currScore + (Math.sqrt(2*currScore+1));}
     }
+//        } 
+    public void Score(Graphics g) {
+    	g.setFont(new Font("TimesNewRoman", Font.PLAIN, 20));
+        g.setColor(Color.BLACK);     	
+    	g.drawString("Score", 25,25);
+    } 
+    
+    
+
+ 
+//       uiManager.Score(g);
+    //Add Score. Quizas en display.java
+       
+        	//public void paintComponent (Graphics g){
+        		
+        		//g.setFont(new Font("style",type, size));
+        		//g.setColor(Color.BLACK);
+        		//g.drawString("string here", currScore, 5 , 50);
+        //}
     
     public boolean getSlowedTime() {
     	return slowedTime;
@@ -450,5 +471,6 @@ public class Player {
         }
 
     }
+
 
 }
