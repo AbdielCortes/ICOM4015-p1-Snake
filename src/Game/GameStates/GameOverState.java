@@ -20,18 +20,18 @@ public class GameOverState extends State {
     	uiManager = new UIManager(handler);
     	handler.getMouseManager().setUimanager(uiManager);
 
-    	uiManager.addObjects(new UIImageButton(100, 330, 128, 64, Images.BTitle, () -> {
-    		handler.getMouseManager().setUimanager(null);
-    		State.setState(handler.getGame().menuState);
+    	uiManager.addObjects(new UIImageButton(80, 230, 186, 66, Images.Restart, new ClickListlener() {
+    		@Override
+            public void onClick() {
+                handler.getMouseManager().setUimanager(null);
+                handler.getGame().reStart(); //restarts game
+                State.setState(handler.getGame().gameState);
+            }
     	}));
     	
-    	uiManager.addObjects(new UIImageButton(100, 250, 128, 64, Images.butstart, new ClickListlener() {
-    		@Override
-    		public void onClick() {
-    			handler.getMouseManager().setUimanager(null);
-    			handler.getGame().reStart(); //restarts game
-    			State.setState(handler.getGame().gameState);
-    		}
+    	uiManager.addObjects(new UIImageButton(80, 230+(66+30), 186, 66, Images.BTitle, () -> {
+    		handler.getMouseManager().setUimanager(null);
+    		State.setState(handler.getGame().menuState);
     	}));
 
     }
