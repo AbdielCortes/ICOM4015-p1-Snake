@@ -31,7 +31,7 @@ public class Player {
     public int moveCounter; //how many times the player moved
     public long frameCounter; //how many frames have gone by
     public long stepCounter; //how many steps has the snake taken
-    public long eatCounter;
+    public long second = 0;
 
     //Stores current direction
     public String direction;//is your first name one?
