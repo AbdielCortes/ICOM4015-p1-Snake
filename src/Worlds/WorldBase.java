@@ -24,7 +24,7 @@ public abstract class WorldBase {
     //The size of each box, the size of each box will be GridPixelsize x GridPixelsize.
     public int GridPixelsize;
     
-    public static int windowPixelSize = 800; //sets window pixel dimensions
+    public static int windowPixelSize = 780; //sets window pixel dimensions
     
     public Player player;
 

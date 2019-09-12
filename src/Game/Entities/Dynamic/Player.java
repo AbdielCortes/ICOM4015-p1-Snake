@@ -11,6 +11,7 @@ import javax.sound.sampled.*;
 
 import java.math.*;
 
+import Game.Entities.Static.Apple;
 //import Display.DisplayScreen;
 import Game.GameStates.State;
 
@@ -30,14 +31,16 @@ public class Player {
     public int moveCounter; //how many times the player moved
     public long frameCounter; //how many frames have gone by
     public long stepCounter; //how many steps has the snake taken
+    public long eatCounter;
 
     //Stores current direction
     public String direction;//is your first name one?
 
 
-    public double currScore = 0;
+    public double currScore;
     //bigger velocity makes it slower, smaller velocity makes it faster
     public int velocity;
+    public int lastVelocity;
 
     
     //colors
@@ -65,6 +68,7 @@ public class Player {
         slowedTime = false;
         lenght = 1; //how long is player at start
         velocity = 3;
+        currScore = 0;
 
     }
 
@@ -84,13 +88,15 @@ public class Player {
         //uses 'd' key to test methods
         if(handler.getKeyManager().debug) {
         	//some code
+        	handler.getWorld().playerLocation[handler.getWorld().body.getLast().x][handler.getWorld().body.getLast().y] = false;
+            handler.getWorld().body.removeLast(); //removes last piece of the tail from body
         }
         
         frameCounter++; //counts how many frames have passed
         //sets things back to normal after 9s of eating power up
         if(frameCounter == 540 && getSlowedTime() == true) {
         	setSlowedTime(false);
-        	velocity -= 5; //reverts speed back to normal
+        	velocity = lastVelocity; //reverts speed back to normal
         	//resume theme music
         }
         
@@ -98,7 +104,7 @@ public class Player {
         addTail(); //adds tail piece when n key is pressed     
         velocity(); //changes velocity with '+' and '-'
         timeState(); //sets color of snake and apple depending on whether time is slowed or not
-        isGood(); //checks if apple is rotten or not
+        checkGood(); //checks if apple is rotten or not
 
     }
     
@@ -162,11 +168,32 @@ public class Player {
         }
 
 
-        if(handler.getWorld().appleLocation[xCoord][yCoord]){ //eats apple
+        if(handler.getWorld().appleLocation[xCoord][yCoord] && Apple.isGood()){ //eats apple
             Eat();
             setJustAte(true);
-            currScore=currScore + (Math.sqrt(2*currScore+1));
-            //System.out.println(currScore);
+        	
+        	if(!getSlowedTime()) { //increments velocity only when apple is good and time is not slowed
+            	velocity -= 5+1;
+            }
+        	currScore=currScore + (Math.sqrt(2*currScore+1)); //increase score
+        	System.out.println(currScore);
+        }
+        
+        if(handler.getWorld().appleLocation[xCoord][yCoord] && !Apple.isGood()) {
+        	Eat();
+        	setJustAte(true);
+        	
+        	if(lenght > 1) { //removes tail piece
+	        	handler.getWorld().playerLocation[handler.getWorld().body.getLast().x][handler.getWorld().body.getLast().y] = false;
+	            handler.getWorld().body.removeLast(); //removes last piece of the tail from body
+	            lenght--;
+        	}
+        	
+        	currScore -= Math.sqrt(2*currScore+1);
+        	if(currScore < 0) {
+        		currScore = 0;
+        	}
+        	System.out.println(currScore);
         }
         
         //activates slow time power up when player eats it
@@ -180,10 +207,6 @@ public class Player {
             handler.getWorld().body.addFirst(new Tail(x, y,handler)); //adds new tail at the front
             //this creates missing tail segment glitch
         }
-            
-//        if(!handler.getWorld().body.isEmpty()) { 
-//            State.setState(handler.getGame().gameOverState);
-//            }
 
     }
 
@@ -380,18 +403,15 @@ public class Player {
         
     }
     
-    public void isGood() {
-    	if(stepCounter >= 200) { //apple is bad if player walks 200steps
-    		//System.out.println("bad");
+    public void checkGood() {
+    	if(stepCounter >= 420) { //apple is bad if player walks 200steps
     		setAppleColor(rottenBrown); //changes apple color to brown
-    		//decrease score
-    		//lose tail
-    		
+    		Apple.setGood(false);
     	}
     	if(getJustAte()) { //if player eats apple reset stepCounter
-    		//System.out.println("yummy");
     		stepCounter = 0;
     		setJustAte(false);
+    		Apple.setGood(true);
     	}
     }
     
@@ -402,7 +422,9 @@ public class Player {
     	setFrameCounter(0); //starts timer at 0
     	setSlowedTime(true); //changes snake and apple color
     	
-    	velocity += 5; //set speed to slower pace
+    	lastVelocity = velocity;
+    	//slow velocity = 8
+    	velocity = 8; //set speed to slower pace
     	//stop music
     	playSound("/music/ZaWarudo.wav"); //play za warudo sound
 
