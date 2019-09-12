@@ -12,6 +12,7 @@ import javax.sound.sampled.*;
 import java.math.*;
 
 import Game.Entities.Static.Apple;
+import Game.GameStates.GameState;
 //import Display.DisplayScreen;
 import Game.GameStates.State;
 
@@ -31,7 +32,6 @@ public class Player {
     public int moveCounter; //how many times the player moved
     public long frameCounter; //how many frames have gone by
     public long stepCounter; //how many steps has the snake taken
-    public long second = 0;
 
     //Stores current direction
     public String direction;//is your first name one?
@@ -176,7 +176,6 @@ public class Player {
             	velocity -= 5+1;
             }
         	currScore=currScore + (Math.sqrt(2*currScore+1)); //increase score
-        	System.out.println(currScore);
         }
         
         if(handler.getWorld().appleLocation[xCoord][yCoord] && !Apple.isGood()) {
@@ -193,7 +192,6 @@ public class Player {
         	if(currScore < 0) {
         		currScore = 0;
         	}
-        	System.out.println(currScore);
         }
         
         //activates slow time power up when player eats it
@@ -465,7 +463,7 @@ public class Player {
     	String currS = String.format("%.2f", currScore);
     	g.setFont(new Font("TimesNewRoman", Font.PLAIN, 20));
         g.setColor(Color.BLACK);     	
-    	g.drawString("Score: "+currS, 350, 25);
+    	g.drawString("Score: "+currS, 339, 25);
     } 
     
     public static boolean getSlowedTime() {
@@ -521,31 +519,5 @@ public class Player {
             e.printStackTrace();
         }
     }
-    
-//    public void playSoundContinously(String fileLocation) {
-//    	//play sound
-//    	InputStream audioFile;
-//        AudioInputStream audioStream;
-//        AudioFormat format;
-//        DataLine.Info info;
-//        Clip audioClip;
-//        
-//        try {
-//            audioFile = getClass().getResourceAsStream(fileLocation); //game music
-//            audioStream = AudioSystem.getAudioInputStream(audioFile);
-//            format = audioStream.getFormat();
-//            info = new DataLine.Info(Clip.class, format);
-//            audioClip = (Clip) AudioSystem.getLine(info);
-//            audioClip.open(audioStream);
-//            audioClip.loop(Clip.LOOP_CONTINUOUSLY);
-//        } catch (UnsupportedAudioFileException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (LineUnavailableException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
 
 }

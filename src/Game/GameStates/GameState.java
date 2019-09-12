@@ -31,7 +31,6 @@ public class GameState extends State {
         //sets player location
         handler.getWorld().playerLocation[handler.getWorld().player.xCoord][handler.getWorld().player.yCoord] =true;
 
-
     }
 
     @Override

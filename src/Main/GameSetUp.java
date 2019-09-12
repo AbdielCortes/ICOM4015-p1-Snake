@@ -50,11 +50,11 @@ public class GameSetUp implements Runnable {
     public State gameOverState;
 
     //Res.music
-//    private InputStream audioFile;
-//    private AudioInputStream audioStream;
-//    private AudioFormat format;
-//    private DataLine.Info info;
-//    private Clip audioClip;
+    private InputStream audioFile;
+    private AudioInputStream audioStream;
+    private AudioFormat format;
+    private DataLine.Info info;
+    private Clip audioClip;
 
     private BufferedImage loading;
 
@@ -88,24 +88,22 @@ public class GameSetUp implements Runnable {
 
         State.setState(menuState);
 
-//        try {
-//            audioFile = getClass().getResourceAsStream("/music/DioTheme.wav"); //game music
-//            audioStream = AudioSystem.getAudioInputStream(audioFile);
-//            format = audioStream.getFormat();
-//            info = new DataLine.Info(Clip.class, format);
-//            audioClip = (Clip) AudioSystem.getLine(info);
-//            audioClip.open(audioStream);
-//            audioClip.loop(Clip.LOOP_CONTINUOUSLY);
-//       
-//            //poner funcion de close cuando se coma power up
-//
-//        } catch (UnsupportedAudioFileException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (LineUnavailableException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            audioFile = getClass().getResourceAsStream("/music/DioTheme.wav"); //game music
+            audioStream = AudioSystem.getAudioInputStream(audioFile);
+            format = audioStream.getFormat();
+            info = new DataLine.Info(Clip.class, format);
+            audioClip = (Clip) AudioSystem.getLine(info);
+            audioClip.open(audioStream);
+            audioClip.loop(Clip.LOOP_CONTINUOUSLY);
+
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (LineUnavailableException e) {
+            e.printStackTrace();
+        }
     }
 
     public void reStart(){
