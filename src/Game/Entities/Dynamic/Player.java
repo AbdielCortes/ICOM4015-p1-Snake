@@ -4,6 +4,7 @@ import Main.Handler;
 import Resources.Images;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Random;
@@ -77,7 +78,7 @@ public class Player {
         if(moveCounter>=velocity) { //every five frames the snake moves, changes snake speed
             checkCollisionAndMove();
             moveCounter=0; 
-            stepCounter++;
+            stepCounter++; //counts how many steps snake has taken, used to activate rotten apple
         }
         
         //pauses game when 'esc' is pressed
@@ -86,10 +87,9 @@ public class Player {
         }
         
         //uses 'd' key to test methods
-        if(handler.getKeyManager().debug) {
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_D)) {
         	//some code
-        	handler.getWorld().playerLocation[handler.getWorld().body.getLast().x][handler.getWorld().body.getLast().y] = false;
-            handler.getWorld().body.removeLast(); //removes last piece of the tail from body
+        	//removeTail();
         }
         
         frameCounter++; //counts how many frames have passed
@@ -97,7 +97,6 @@ public class Player {
         if(frameCounter == 540 && getSlowedTime() == true) {
         	setSlowedTime(false);
         	velocity = lastVelocity; //reverts speed back to normal
-        	//resume theme music
         }
         
         movePreventBacktracking(); //prevents snake from backing up on itself
@@ -182,15 +181,12 @@ public class Player {
         	Eat();
         	setJustAte(true);
         	
-        	if(lenght > 1) { //removes tail piece
-	        	handler.getWorld().playerLocation[handler.getWorld().body.getLast().x][handler.getWorld().body.getLast().y] = false;
-	            handler.getWorld().body.removeLast(); //removes last piece of the tail from body
-	            lenght--;
-        	}
+        	removeTail(); //removes tail piece added by eating this apple
+        	removeTail(); //removes tail piece because apple was rotten
         	
-        	currScore -= Math.sqrt(2*currScore+1);
-        	if(currScore < 0) {
-        		currScore = 0;
+        	currScore -= Math.sqrt(2*currScore+1); //decreases score when player eats rotten apple
+        	if(currScore < 0) { //prevents score from turning negative
+        		currScore = 0; 
         	}
         }
         
@@ -243,7 +239,7 @@ public class Player {
             }
         }
         
-        Score(g);
+        Score(g); //shows score on screen
 
     }
     
@@ -265,7 +261,7 @@ public class Player {
         	setAppleColor(timeYellow);
     	}
     	else {
-    		//playSoundContinously("/music/DioTheme.wav");
+    		//changes snake and apple color back to normal
     		setSnakeColor(snakeDefault);
         	setAppleColor(appleDefault);
     	}
@@ -401,8 +397,9 @@ public class Player {
         
     }
     
+    //method that decides when to turn apple rotten
     public void checkGood() {
-    	if(stepCounter >= 420) { //apple is bad if player walks 200steps
+    	if(stepCounter >= 400) { //apple is bad if player walks 400steps
     		setAppleColor(rottenBrown); //changes apple color to brown
     		Apple.setGood(false);
     	}
@@ -421,9 +418,7 @@ public class Player {
     	setSlowedTime(true); //changes snake and apple color
     	
     	lastVelocity = velocity;
-    	//slow velocity = 8
     	velocity = 8; //set speed to slower pace
-    	//stop music
     	playSound("/music/ZaWarudo.wav"); //play za warudo sound
 
     	handler.getWorld().slowTimeLocation[xCoord][yCoord]=false; //deletes eaten power up, if true spawns new power up
@@ -438,7 +433,7 @@ public class Player {
                 handler.getWorld().playerLocation[i][j]=false;
             }
         }
-        State.setState(handler.getGame().gameOverState);
+        State.setState(handler.getGame().gameOverState); //switches to game over screen
         playSound("/music/ToBeContinued.wav");
 
     }
@@ -458,13 +453,6 @@ public class Player {
     public void setJustAte(boolean justAte) {
         this.justAte = justAte;
     }
-
-    public void Score(Graphics g) {
-    	String currS = String.format("%.2f", currScore);
-    	g.setFont(new Font("TimesNewRoman", Font.PLAIN, 20));
-        g.setColor(Color.BLACK);     	
-    	g.drawString("Score: "+currS, 339, 25);
-    } 
     
     public static boolean getSlowedTime() {
     	return slowedTime;
@@ -474,28 +462,44 @@ public class Player {
     	slowedTime = time;
     }
     
+    //method that shows score
+    public void Score(Graphics g) {
+    	String currS = String.format("%.2f", currScore);
+    	g.setFont(new Font("TimesNewRoman", Font.PLAIN, 20));
+        g.setColor(Color.BLACK);     	
+    	g.drawString("Score: "+currS, 339, 25);
+    } 
+    
     //Method to add tail using "N" key
     public void addTail() {
-    	if(handler.getKeyManager().tail) {
+    	if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_N)) {
     		lenght++;
     		handler.getWorld().body.addFirst(new Tail(xCoord, yCoord, handler));	
     	}
     }
     
-    //Method to increase velocity with '+' and decrease velocity with '-'
+    //method that removes tail, used for rotten apple
+    public void removeTail() {
+    	if(lenght > 1) { //removes tail piece if snake is more than one square long
+        	handler.getWorld().playerLocation[handler.getWorld().body.getLast().x][handler.getWorld().body.getLast().y] = false;
+            handler.getWorld().body.removeLast(); //removes last piece of the tail from body
+            lenght--;
+    	}
+    }
+    
+    //method to increase velocity with '+' and decrease velocity with '-'
     public void velocity() {
-        if(handler.getKeyManager().increase) { //increase velocity
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_EQUALS)) { //increase velocity
         	velocity--;
         }
         
-        if(handler.getKeyManager().decrease) { //decrease velocity
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_MINUS)) { //decrease velocity
         	velocity++;
         }
     }
     
     //method to play sounds
     public void playSound(String fileLocation) {
-    	//play sound
     	InputStream audioFile;
         AudioInputStream audioStream;
         AudioFormat format;

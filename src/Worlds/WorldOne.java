@@ -69,7 +69,7 @@ public class WorldOne extends WorldBase{
     	appleLocation[appleX][appleY]=true; //sets apple location to random x and random y
     }
     
-    
+    //method that spawns slowTime power up
     public void spawnSlowTime() {
     	int slowTimeX = new Random().nextInt(handler.getWorld().GridWidthHeightPixelCount-1); //generates random x coordinates
     	int slowTimeY = new Random().nextInt(handler.getWorld().GridWidthHeightPixelCount-1); //generates random y coordinates

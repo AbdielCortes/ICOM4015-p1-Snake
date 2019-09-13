@@ -45,6 +45,8 @@ public class KeyManager implements KeyListener {
 		}
 		
 		//assigns key variables to keyboard keys
+		
+		//keys to move snake using arrow keys
 		up = keys[KeyEvent.VK_UP];
 		down = keys[KeyEvent.VK_DOWN];
 		left = keys[KeyEvent.VK_LEFT];

@@ -20,6 +20,7 @@ public class GameOverState extends State {
     	uiManager = new UIManager(handler);
     	handler.getMouseManager().setUimanager(uiManager);
 
+    	//restart button
     	uiManager.addObjects(new UIImageButton(80, 230, 186, 66, Images.Restart, new ClickListlener() {
     		@Override
             public void onClick() {
@@ -29,11 +30,12 @@ public class GameOverState extends State {
             }
     	}));
     	
+    	//return to title screen button
     	uiManager.addObjects(new UIImageButton(80, 230+(66+30), 186, 66, Images.BTitle, () -> {
     		handler.getMouseManager().setUimanager(null);
     		State.setState(handler.getGame().menuState);
     	}));
-
+    	
     }
 
     @Override

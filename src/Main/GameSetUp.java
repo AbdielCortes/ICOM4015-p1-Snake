@@ -96,6 +96,8 @@ public class GameSetUp implements Runnable {
             audioClip = (Clip) AudioSystem.getLine(info);
             audioClip.open(audioStream);
             audioClip.loop(Clip.LOOP_CONTINUOUSLY);
+            //I wanted to make it so that when I played additional sounds the background 
+            //music pause, but I wasan't able to figure it out on time
 
         } catch (UnsupportedAudioFileException e) {
             e.printStackTrace();
