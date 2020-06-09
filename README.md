@@ -26,4 +26,4 @@ when you eat it.
 
 <br>
 
-###### Disclaimer: I do not own any of the images and sounds. They were only used for educational purposes.
+###### Disclaimer: I do not own any of the images and sounds used in this project. They were only used for educational purposes.
