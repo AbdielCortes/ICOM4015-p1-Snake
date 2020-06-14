@@ -1,6 +1,6 @@
 ## Advanced Programming Project 1 - The World Snake
 
-The classic snake game with a *Jojo's Biazzare Adventure: Stardust Crusaders* twist 
+The classic snake game with a *Jojo's Biazarre Adventure: Stardust Crusaders* twist 
 added to it. Your goal is to eat as many apples (red squares) as possible without 
 crashing into yourself; when you crash into walls you appear on the opposite side.
 
@@ -19,7 +19,7 @@ change color, and a sound effect plays when you eat the power up.
 
 <img src="ReadMeImages/powerUp.PNG" width="400"> 
 
-If you take too long to reach the apple it will rot, causing you to loose poins
+If you take too long to reach the apple it will rot, causing you to loose points
 when you eat it.
 
 <img src="ReadMeImages/rotten.PNG" width="400"> 
@@ -28,7 +28,7 @@ when you eat it.
 * Up = up arrow
 * Down = down arrow
 * Left = left arrow
-* Rigth = right arrow
+* Right = right arrow
 * Pause = ESC
 
 <br>
